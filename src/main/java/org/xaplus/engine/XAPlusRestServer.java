@@ -1,4 +1,4 @@
-package com.crionuke.xaplus;
+package org.xaplus.engine;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +17,12 @@ public class XAPlusRestServer implements XAPlusFactory, XAPlusResource {
     static private final Logger logger = LoggerFactory.getLogger(XAPlusRestServer.class);
 
     private final String METHOD_PREPARE = "prepare";
-    private final String METHOD_READY = "ready";
+    private final String METHOD_CANCELLED = "cancelled";
+    private final String METHOD_READIED = "readied";
     private final String METHOD_COMMIT = "commit";
-    private final String METHOD_DONE = "done";
     private final String METHOD_ROLLBACK = "rollback";
+    private final String METHOD_FAILED = "failed";
+    private final String METHOD_DONE = "done";
     private final String METHOD_RETRY = "retry";
 
     private final String hostname;
@@ -58,9 +60,22 @@ public class XAPlusRestServer implements XAPlusFactory, XAPlusResource {
     }
 
     @Override
-    public void ready(Xid xid) throws XAPlusException {
+    public void cancelled(Xid xid) throws XAPlusException {
         try {
-            request(METHOD_READY, "xid=" + xid.toString());
+            request(METHOD_CANCELLED, "xid=" + xid.toString());
+        } catch (XAException xae) {
+            if (xae.errorCode > 0) {
+                throw new XAPlusException(xae.errorCode);
+            } else {
+                throw new XAPlusException(xae.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void readied(Xid xid) throws XAPlusException {
+        try {
+            request(METHOD_READIED, "xid=" + xid.toString());
         } catch (XAException xae) {
             if (xae.errorCode > 0) {
                 throw new XAPlusException(xae.errorCode);
@@ -78,6 +93,19 @@ public class XAPlusRestServer implements XAPlusFactory, XAPlusResource {
     @Override
     public void rollback(Xid xid) throws XAException {
         request(METHOD_ROLLBACK, "xid=" + xid.toString());
+    }
+
+    @Override
+    public void failed(Xid xid) throws XAPlusException {
+        try {
+            request(METHOD_FAILED, "xid=" + xid.toString());
+        } catch (XAException xae) {
+            if (xae.errorCode > 0) {
+                throw new XAPlusException(xae.errorCode);
+            } else {
+                throw new XAPlusException(xae.getMessage());
+            }
+        }
     }
 
     @Override

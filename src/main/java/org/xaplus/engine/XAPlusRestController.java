@@ -1,11 +1,11 @@
-package com.crionuke.xaplus;
+package org.xaplus.engine;
 
-import com.crionuke.xaplus.events.xaplus.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.xaplus.engine.events.xaplus.*;
 
 /**
  * @since 1.0.0
@@ -37,14 +37,30 @@ class XAPlusRestController {
         }
     }
 
-    @RequestMapping("xaplus/ready")
+    @RequestMapping("xaplus/cancelled")
+    boolean cancelled(@RequestParam("xid") String xidString) {
+        try {
+            XAPlusXid xid = new XAPlusXid(xidString);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Got cancelled status for xid={} from subordinate server", xid);
+            }
+            dispatcher.dispatch(new XAPlusRemoteSubordinateCancelledEvent(xid));
+            return true;
+        } catch (IllegalArgumentException iae) {
+            return false;
+        } catch (InterruptedException ie) {
+            return false;
+        }
+    }
+
+    @RequestMapping("xaplus/readied")
     boolean ready(@RequestParam("xid") String xidString) {
         try {
             XAPlusXid xid = new XAPlusXid(xidString);
             if (logger.isDebugEnabled()) {
-                logger.debug("Got ready status for xid={} from subordinate server", xid);
+                logger.debug("Got readied status for xid={} from subordinate server", xid);
             }
-            dispatcher.dispatch(new XAPlusRemoteSubordinateReadyEvent(xid));
+            dispatcher.dispatch(new XAPlusRemoteSubordinateReadiedEvent(xid));
             return true;
         } catch (IllegalArgumentException iae) {
             return false;
@@ -77,6 +93,22 @@ class XAPlusRestController {
                 logger.debug("Got rollback request for xid={} from superior server", xid);
             }
             dispatcher.dispatch(new XAPlusRemoteSuperiorOrderToRollbackEvent(xid));
+            return true;
+        } catch (IllegalArgumentException iae) {
+            return false;
+        } catch (InterruptedException ie) {
+            return false;
+        }
+    }
+
+    @RequestMapping("xaplus/failed")
+    boolean failed(@RequestParam("xid") String xidString) {
+        try {
+            XAPlusXid xid = new XAPlusXid(xidString);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Got failed status for xid={} from subordinate server", xid);
+            }
+            dispatcher.dispatch(new XAPlusRemoteSubordinateFailedEvent(xid));
             return true;
         } catch (IllegalArgumentException iae) {
             return false;
