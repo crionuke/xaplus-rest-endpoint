@@ -17,8 +17,8 @@ class XAPlusRestController {
 
     private final XAPlusDispatcher dispatcher;
 
-    XAPlusRestController(XAPlusDispatcher dispatcher) {
-        this.dispatcher = dispatcher;
+    XAPlusRestController(XAPlus xaPlus) {
+        this.dispatcher = xaPlus.dispatcher;
     }
 
     @RequestMapping("xaplus/prepare")
