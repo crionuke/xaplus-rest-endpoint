@@ -24,7 +24,7 @@ class XAPlusRestController {
     @RequestMapping("xaplus/prepare")
     boolean prepare(@RequestParam("xid") String xidString) {
         try {
-            XAPlusXid xid = new XAPlusXid(xidString);
+            XAPlusXid xid = XAPlusXid.fromString(xidString);
             if (logger.isDebugEnabled()) {
                 logger.debug("Got prepare request for xid={} from superior server", xid);
             }
@@ -40,7 +40,7 @@ class XAPlusRestController {
     @RequestMapping("xaplus/cancelled")
     boolean cancelled(@RequestParam("xid") String xidString) {
         try {
-            XAPlusXid xid = new XAPlusXid(xidString);
+            XAPlusXid xid = XAPlusXid.fromString(xidString);
             if (logger.isDebugEnabled()) {
                 logger.debug("Got cancelled status for xid={} from subordinate server", xid);
             }
@@ -56,7 +56,7 @@ class XAPlusRestController {
     @RequestMapping("xaplus/readied")
     boolean ready(@RequestParam("xid") String xidString) {
         try {
-            XAPlusXid xid = new XAPlusXid(xidString);
+            XAPlusXid xid = XAPlusXid.fromString(xidString);
             if (logger.isDebugEnabled()) {
                 logger.debug("Got readied status for xid={} from subordinate server", xid);
             }
@@ -72,7 +72,7 @@ class XAPlusRestController {
     @RequestMapping("xaplus/commit")
     boolean commit(@RequestParam("xid") String xidString) {
         try {
-            XAPlusXid xid = new XAPlusXid(xidString);
+            XAPlusXid xid = XAPlusXid.fromString(xidString);
             if (logger.isDebugEnabled()) {
                 logger.debug("Got commit request xid={} from superior server", xid);
             }
@@ -88,7 +88,7 @@ class XAPlusRestController {
     @RequestMapping("xaplus/rollback")
     boolean rollback(@RequestParam("xid") String xidString) {
         try {
-            XAPlusXid xid = new XAPlusXid(xidString);
+            XAPlusXid xid = XAPlusXid.fromString(xidString);
             if (logger.isDebugEnabled()) {
                 logger.debug("Got rollback request for xid={} from superior server", xid);
             }
@@ -104,7 +104,7 @@ class XAPlusRestController {
     @RequestMapping("xaplus/failed")
     boolean failed(@RequestParam("xid") String xidString) {
         try {
-            XAPlusXid xid = new XAPlusXid(xidString);
+            XAPlusXid xid = XAPlusXid.fromString(xidString);
             if (logger.isDebugEnabled()) {
                 logger.debug("Got failed status for xid={} from subordinate server", xid);
             }
@@ -120,7 +120,7 @@ class XAPlusRestController {
     @RequestMapping("xaplus/done")
     boolean done(@RequestParam("xid") String xidString) {
         try {
-            XAPlusXid xid = new XAPlusXid(xidString);
+            XAPlusXid xid = XAPlusXid.fromString(xidString);
             if (logger.isDebugEnabled()) {
                 logger.debug("Got done status for xid={} from subordinate server", xid);
             }
