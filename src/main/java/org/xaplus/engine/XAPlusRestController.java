@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.xaplus.engine.events.xaplus.*;
 
 /**
- * @since 1.0.0`
+ * @since 1.0.0
  * @author Kirill Byvshev (k@byv.sh)
  */
 @RestController
