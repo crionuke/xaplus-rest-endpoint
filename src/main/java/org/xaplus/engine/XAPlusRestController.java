@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.xaplus.engine.events.xaplus.*;
 
 /**
- * @since 1.0.0
+ * @since 1.0.0`
  * @author Kirill Byvshev (k@byv.sh)
  */
 @RestController
@@ -29,22 +29,6 @@ class XAPlusRestController {
                 logger.debug("Got prepare request for xid={} from superior server", xid);
             }
             dispatcher.dispatch(new XAPlusRemoteSuperiorOrderToPrepareEvent(xid));
-            return true;
-        } catch (IllegalArgumentException iae) {
-            return false;
-        } catch (InterruptedException ie) {
-            return false;
-        }
-    }
-
-    @RequestMapping("xaplus/cancelled")
-    boolean cancelled(@RequestParam("xid") String xidString) {
-        try {
-            XAPlusXid xid = XAPlusXid.fromString(xidString);
-            if (logger.isDebugEnabled()) {
-                logger.debug("Got cancelled status for xid={} from subordinate server", xid);
-            }
-            dispatcher.dispatch(new XAPlusRemoteSubordinateCancelledEvent(xid));
             return true;
         } catch (IllegalArgumentException iae) {
             return false;

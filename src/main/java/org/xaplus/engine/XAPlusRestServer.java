@@ -17,7 +17,6 @@ public class XAPlusRestServer implements XAPlusFactory, XAPlusResource {
     static private final Logger logger = LoggerFactory.getLogger(XAPlusRestServer.class);
 
     private final String METHOD_PREPARE = "prepare";
-    private final String METHOD_CANCELLED = "cancelled";
     private final String METHOD_READIED = "readied";
     private final String METHOD_COMMIT = "commit";
     private final String METHOD_ROLLBACK = "rollback";
@@ -57,19 +56,6 @@ public class XAPlusRestServer implements XAPlusFactory, XAPlusResource {
     @Override
     public int prepare(Xid xid) throws XAException {
         return request(METHOD_PREPARE, "xid=" + xid.toString());
-    }
-
-    @Override
-    public void cancelled(Xid xid) throws XAPlusException {
-        try {
-            request(METHOD_CANCELLED, "xid=" + xid.toString());
-        } catch (XAException xae) {
-            if (xae.errorCode > 0) {
-                throw new XAPlusException(xae.errorCode);
-            } else {
-                throw new XAPlusException(xae.getMessage());
-            }
-        }
     }
 
     @Override
