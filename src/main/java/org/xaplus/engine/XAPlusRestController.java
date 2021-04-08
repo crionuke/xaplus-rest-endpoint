@@ -101,29 +101,14 @@ class XAPlusRestController {
         }
     }
 
-    @RequestMapping("xaplus/done")
-    boolean done(@RequestParam("xid") String xidString) {
+    @RequestMapping("xaplus/retry")
+    boolean retry(@RequestParam("xid") String xidString) {
         try {
             XAPlusXid xid = XAPlusXid.fromString(xidString);
             if (logger.isDebugEnabled()) {
-                logger.debug("Got done status for xid={} from subordinate server", xid);
+                logger.debug("Got retry request from subordinate server, xid={}", xid);
             }
-            dispatcher.dispatch(new XAPlusRemoteSubordinateDoneEvent(xid));
-            return true;
-        } catch (IllegalArgumentException iae) {
-            return false;
-        } catch (InterruptedException ie) {
-            return false;
-        }
-    }
-
-    @RequestMapping("xaplus/retry")
-    boolean retry(@RequestParam("serverId") String serverId) {
-        try {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Got retry request from subordinate server={}", serverId);
-            }
-            dispatcher.dispatch(new XAPlusRemoteSubordinateRetryRequestEvent(serverId));
+            dispatcher.dispatch(new XAPlusRemoteSubordinateRetryRequestEvent(xid));
             return true;
         } catch (InterruptedException ie) {
             return false;

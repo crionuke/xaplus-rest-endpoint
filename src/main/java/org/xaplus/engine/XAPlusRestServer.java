@@ -21,7 +21,6 @@ public class XAPlusRestServer implements XAPlusFactory, XAPlusResource {
     private final String METHOD_COMMIT = "commit";
     private final String METHOD_ROLLBACK = "rollback";
     private final String METHOD_FAILED = "failed";
-    private final String METHOD_DONE = "done";
     private final String METHOD_RETRY = "retry";
 
     private final String hostname;
@@ -95,19 +94,6 @@ public class XAPlusRestServer implements XAPlusFactory, XAPlusResource {
     }
 
     @Override
-    public void done(Xid xid) throws XAPlusException {
-        try {
-            request(METHOD_DONE, "xid=" + xid.toString());
-        } catch (XAException xae) {
-            if (xae.errorCode > 0) {
-                throw new XAPlusException(xae.errorCode);
-            } else {
-                throw new XAPlusException(xae.getMessage());
-            }
-        }
-    }
-
-    @Override
     public Xid[] recover(int flag) throws XAException {
         throw new UnsupportedOperationException();
     }
@@ -118,9 +104,9 @@ public class XAPlusRestServer implements XAPlusFactory, XAPlusResource {
     }
 
     @Override
-    public void retry(String serverId) throws XAPlusException {
+    public void retry(XAPlusXid xid) throws XAPlusException {
         try {
-            request(METHOD_RETRY, "serverId=" + serverId);
+            request(METHOD_RETRY, "xid=" + xid.toString());
         } catch (XAException xae) {
             if (xae.errorCode > 0) {
                 throw new XAPlusException(xae.errorCode);
