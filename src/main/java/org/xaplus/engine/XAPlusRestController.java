@@ -21,30 +21,14 @@ class XAPlusRestController {
         this.dispatcher = xaPlus.dispatcher;
     }
 
-    @RequestMapping("xaplus/prepare")
-    boolean prepare(@RequestParam("xid") String xidString) {
-        try {
-            XAPlusXid xid = XAPlusXid.fromString(xidString);
-            if (logger.isDebugEnabled()) {
-                logger.debug("Got prepare request for xid={} from superior server", xid);
-            }
-            dispatcher.dispatch(new XAPlusRemoteSuperiorOrderToPrepareEvent(xid));
-            return true;
-        } catch (IllegalArgumentException iae) {
-            return false;
-        } catch (InterruptedException ie) {
-            return false;
-        }
-    }
-
-    @RequestMapping("xaplus/readied")
+    @RequestMapping("xaplus/ready")
     boolean ready(@RequestParam("xid") String xidString) {
         try {
             XAPlusXid xid = XAPlusXid.fromString(xidString);
             if (logger.isDebugEnabled()) {
-                logger.debug("Got readied status for xid={} from subordinate server", xid);
+                logger.debug("Got ready status for xid={} from subordinate server", xid);
             }
-            dispatcher.dispatch(new XAPlusRemoteSubordinateReadiedEvent(xid));
+            dispatcher.dispatch(new XAPlusRemoteSubordinateReadyEvent(xid));
             return true;
         } catch (IllegalArgumentException iae) {
             return false;

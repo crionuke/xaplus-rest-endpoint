@@ -16,8 +16,7 @@ import javax.transaction.xa.Xid;
 public class XAPlusRestServer implements XAPlusFactory, XAPlusResource {
     static private final Logger logger = LoggerFactory.getLogger(XAPlusRestServer.class);
 
-    private final String METHOD_PREPARE = "prepare";
-    private final String METHOD_READIED = "readied";
+    private final String METHOD_READY = "ready";
     private final String METHOD_COMMIT = "commit";
     private final String METHOD_ROLLBACK = "rollback";
     private final String METHOD_FAILED = "failed";
@@ -54,13 +53,13 @@ public class XAPlusRestServer implements XAPlusFactory, XAPlusResource {
 
     @Override
     public int prepare(Xid xid) throws XAException {
-        return request(METHOD_PREPARE, "xid=" + xid.toString());
+        return 0;
     }
 
     @Override
-    public void readied(Xid xid) throws XAPlusException {
+    public void ready(Xid xid) throws XAPlusException {
         try {
-            request(METHOD_READIED, "xid=" + xid.toString());
+            request(METHOD_READY, "xid=" + xid.toString());
         } catch (XAException xae) {
             if (xae.errorCode > 0) {
                 throw new XAPlusException(xae.errorCode);
