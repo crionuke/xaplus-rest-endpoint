@@ -61,11 +61,7 @@ public class XAPlusRestServer implements XAPlusFactory, XAPlusResource {
         try {
             request(METHOD_READY, "xid=" + xid.toString());
         } catch (XAException xae) {
-            if (xae.errorCode > 0) {
-                throw new XAPlusException(xae.errorCode);
-            } else {
-                throw new XAPlusException(xae.getMessage());
-            }
+            throw new XAPlusException(xae.getMessage());
         }
     }
 
@@ -84,11 +80,7 @@ public class XAPlusRestServer implements XAPlusFactory, XAPlusResource {
         try {
             request(METHOD_FAILED, "xid=" + xid.toString());
         } catch (XAException xae) {
-            if (xae.errorCode > 0) {
-                throw new XAPlusException(xae.errorCode);
-            } else {
-                throw new XAPlusException(xae.getMessage());
-            }
+            throw new XAPlusException(xae.getMessage());
         }
     }
 
@@ -107,11 +99,7 @@ public class XAPlusRestServer implements XAPlusFactory, XAPlusResource {
         try {
             request(METHOD_RETRY, "xid=" + xid.toString());
         } catch (XAException xae) {
-            if (xae.errorCode > 0) {
-                throw new XAPlusException(xae.errorCode);
-            } else {
-                throw new XAPlusException(xae.getMessage());
-            }
+            throw new XAPlusException(xae.getMessage());
         }
     }
 
@@ -145,14 +133,11 @@ public class XAPlusRestServer implements XAPlusFactory, XAPlusResource {
         try {
             RestTemplate restTemplate = new RestTemplate();
             String url = "http://" + hostname + ":" + port + "/xaplus/" + method + "?" + parameters;
-            if (logger.isTraceEnabled()) {
-                logger.trace("REQUESTING: url={}", url);
-            }
             if (!restTemplate.getForObject(url, Boolean.class)) {
-                throw new XAException(XAException.XAER_RMERR);
+                throw new XAException("Request failed");
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("REQUESTED: url={}", url);
+                logger.debug("Request XA+ resource url={}", url);
             }
             return XA_OK;
         } catch (RestClientException rce) {

@@ -26,7 +26,8 @@ class XAPlusRestController {
         try {
             XAPlusXid xid = XAPlusXid.fromString(xidString);
             if (logger.isDebugEnabled()) {
-                logger.debug("Got ready status for xid={} from subordinate server", xid);
+                logger.debug("Got ready status from subordinate server {}, xid={}",
+                        xid.getBqual().getServerId(), xid);
             }
             dispatcher.dispatch(new XAPlusRemoteSubordinateReadyEvent(xid));
             return true;
@@ -42,7 +43,8 @@ class XAPlusRestController {
         try {
             XAPlusXid xid = XAPlusXid.fromString(xidString);
             if (logger.isDebugEnabled()) {
-                logger.debug("Got commit request xid={} from superior server", xid);
+                logger.debug("Got commit request from superior server {}, xid={}",
+                        xid.getGtrid().getServerId(), xid);
             }
             dispatcher.dispatch(new XAPlusRemoteSuperiorOrderToCommitEvent(xid));
             return true;
@@ -58,7 +60,8 @@ class XAPlusRestController {
         try {
             XAPlusXid xid = XAPlusXid.fromString(xidString);
             if (logger.isDebugEnabled()) {
-                logger.debug("Got rollback request for xid={} from superior server", xid);
+                logger.debug("Got rollback request from superior server {}, xid={}",
+                        xid.getGtrid().getServerId(), xid);
             }
             dispatcher.dispatch(new XAPlusRemoteSuperiorOrderToRollbackEvent(xid));
             return true;
@@ -74,7 +77,8 @@ class XAPlusRestController {
         try {
             XAPlusXid xid = XAPlusXid.fromString(xidString);
             if (logger.isDebugEnabled()) {
-                logger.debug("Got failed status for xid={} from subordinate server", xid);
+                logger.debug("Got failed status from subordinate server {}, xid={}",
+                        xid.getBqual().getServerId(), xid);
             }
             dispatcher.dispatch(new XAPlusRemoteSubordinateFailedEvent(xid));
             return true;
@@ -90,7 +94,8 @@ class XAPlusRestController {
         try {
             XAPlusXid xid = XAPlusXid.fromString(xidString);
             if (logger.isDebugEnabled()) {
-                logger.debug("Got retry request from subordinate server, xid={}", xid);
+                logger.debug("Got retry request from subordinate server {}, xid={}",
+                        xid.getBqual().getServerId(), xid);
             }
             dispatcher.dispatch(new XAPlusRemoteSubordinateRetryRequestEvent(xid));
             return true;
